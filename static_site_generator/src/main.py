@@ -1,7 +1,7 @@
 from textnode import TextNode
 
 def main():
-    textNode = TextNode("This is some anchor text", "link", "https://www.boot.dev")
+    textNode = TextNode("This is some anchor text", "bold", "https://www.boot.dev")
 
     print(textNode)
 if __name__ == "__main__":
