@@ -9,6 +9,9 @@ class TestHTMLNode(unittest.TestCase):
         
         node2 = HTMLNode(props={"class": "my-class", "id": "my-id"})
         node2_string = " class=\"my-class\" id=\"my-id\""
+
+        node3 = HTMLNode(props=None)
+        node3_string = ""
         
         self.assertEqual(node.props_to_html(), node_string)
     
