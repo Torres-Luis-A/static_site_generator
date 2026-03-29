@@ -1,8 +1,11 @@
 import unittest
 
 
-from markdown_to_blocks import markdown_to_blocks
+from markdown_to_blocks import block_to_block_type, markdown_to_blocks, BlockType
 from textnode import TextType
+
+
+
 
 class TestMarkdownToBlocks(unittest.TestCase):
     def test_markdown_to_blocks(self):
@@ -30,3 +33,12 @@ class TestMarkdownToBlocks(unittest.TestCase):
             ]
             result = markdown_to_blocks(markdown)
             self.assertEqual(result, expected)
+    def test_block_to_block_type(self):
+        self.assertEqual(block_to_block_type("# Heading 1"), BlockType.HEADING)
+        self.assertEqual(block_to_block_type("## Heading 2"), BlockType.HEADING)
+        self.assertEqual(block_to_block_type("### Heading 3"), BlockType.HEADING)
+        self.assertEqual(block_to_block_type("- List item"), BlockType.UNORDERED_LIST)
+        self.assertEqual(block_to_block_type("1. Ordered list item"), BlockType.ORDERED_LIST)
+        self.assertEqual(block_to_block_type("> Quote"), BlockType.QUOTE)
+        self.assertEqual(block_to_block_type("```code block```"), BlockType.CODE)
+        self.assertEqual(block_to_block_type("Regular paragraph text."), BlockType.PARAGRAPH)   

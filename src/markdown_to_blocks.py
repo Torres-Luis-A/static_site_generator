@@ -1,3 +1,4 @@
+from numpy import block
 from zmq import Enum
 
 from tex_to_nodes import tex_to_nodes
@@ -13,7 +14,6 @@ class BlockType(Enum):
     QUOTE = "quote"
     UNORDERED_LIST = "unordered_list"
     ORDERED_LIST = "ordered_list"
-
 
 def markdown_to_blocks(markdown):
     blocks = []
@@ -33,3 +33,17 @@ def markdown_to_blocks(markdown):
         else:
             blocks.append({'type': 'paragraph', 'content': tex_to_nodes(line)})
     return blocks
+
+def block_to_block_type(block):
+    if block.startswith('##') or block.startswith('###') or block.startswith('#') or block.startswith('####') or block.startswith('#####') or block.startswith('######'):
+        return BlockType.HEADING
+    elif block.startswith('```') and ('\n') and block.endswith('```'):
+        return BlockType.CODE
+    elif block.startswith('>'):
+        return BlockType.QUOTE
+    elif block.startswith('- '):
+        return BlockType.UNORDERED_LIST
+    elif block[0].isdigit() and block[1] == '.':
+        return BlockType.ORDERED_LIST
+    else:
+        return BlockType.PARAGRAPH
