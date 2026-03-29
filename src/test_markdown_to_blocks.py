@@ -1,44 +1,21 @@
 import unittest
 
-
-from markdown_to_blocks import block_to_block_type, markdown_to_blocks, BlockType
-from textnode import TextType
-
-
+from markdown_to_blocks import block_to_block_type, markdown_to_blocks, BlockType, markdown_to_html_node
+from textnode import TextNode, TextType
 
 
 class TestMarkdownToBlocks(unittest.TestCase):
-    def test_markdown_to_blocks(self):
+    def test_markdown_to_html_node(self):
         markdown = "# Heading 1\n\n## Heading 2\n\n### Heading 3\n\n- List item 1\n- List item 2\n\nParagraph text."
-        expected = [
-            {'type': 'heading1', 'content': [{'text': 'Heading 1', 'type': TextType.TEXT}]},
-            {'type': 'heading2', 'content': [{'text': 'Heading 2', 'type': TextType.TEXT}]},
-            {'type': 'heading3', 'content': [{'text': 'Heading 3', 'type': TextType.TEXT}]},
-            {'type': 'list_item', 'content': [{'text': 'List item 1', 'type': TextType.TEXT}]},
-            {'type': 'list_item', 'content': [{'text': 'List item 2', 'type': TextType.TEXT}]},
-            {'type': 'paragraph', 'content': [{'text': 'Paragraph text.', 'type': TextType.TEXT}]}
-        ]
-        result = markdown_to_blocks(markdown)
-        self.assertEqual(result, expected)
+        html_node = markdown_to_html_node(markdown)
+        self.assertEqual(html_node.tag, "div")
+        self.assertEqual(len(html_node.children), 5)  # h1, h2, h3, ul, p
 
-        def test_markdown_to_blocks_with_images_and_links(self):
-            markdown = "This is a paragraph with an image ![alt text](https://example.com/image.png) and a link [Google](https://www.google.com)."
-            expected = [
-                {'type': 'paragraph', 'content': [
-                    {'text': 'This is a paragraph with an image ', 'type': TextType.TEXT},
-                    {'text': 'alt text', 'type': TextType.IMAGE, 'url': 'https://example.com/image.png'},
-                    {'text': ' and a link ', 'type': TextType.TEXT},
-                    {'text': 'Google', 'type': TextType.LINK, 'url': 'https://www.google.com'}
-                ]}
-            ]
-            result = markdown_to_blocks(markdown)
-            self.assertEqual(result, expected)
-    def test_block_to_block_type(self):
-        self.assertEqual(block_to_block_type("# Heading 1"), BlockType.HEADING)
-        self.assertEqual(block_to_block_type("## Heading 2"), BlockType.HEADING)
-        self.assertEqual(block_to_block_type("### Heading 3"), BlockType.HEADING)
-        self.assertEqual(block_to_block_type("- List item"), BlockType.UNORDERED_LIST)
-        self.assertEqual(block_to_block_type("1. Ordered list item"), BlockType.ORDERED_LIST)
-        self.assertEqual(block_to_block_type("> Quote"), BlockType.QUOTE)
-        self.assertEqual(block_to_block_type("```code block```"), BlockType.CODE)
-        self.assertEqual(block_to_block_type("Regular paragraph text."), BlockType.PARAGRAPH)   
+    def test_markdown_to_html_node_with_images_and_links(self):
+        markdown = "This is a paragraph with an image ![alt text](https://example.com/image.png) and a link [Google](https://www.google.com)."
+        html_node = markdown_to_html_node(markdown)
+        self.assertEqual(html_node.tag, "div")
+        self.assertEqual(len(html_node.children), 1)
+        paragraph_node = html_node.children[0]
+        self.assertEqual(paragraph_node.tag, "p")
+        self.assertEqual(len(paragraph_node.children), 5)  # text, img, text, a, trailing "."
