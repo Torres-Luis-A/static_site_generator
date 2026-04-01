@@ -2,6 +2,7 @@ import os
 import shutil
 
 from copy_static import copy_static_to_public
+from generate_page import generate_page
 
 
 dir_path_static = "./static"
@@ -15,6 +16,10 @@ def main():
 
     print("Copying static files to public directory...")
     copy_static_to_public(dir_path_static, dir_path_public)
+    print("Generating pages...")
+    generate_page("./content/index.md", "./template.html", "./public/index.html")
+
+
 
 
 main()
