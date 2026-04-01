@@ -7,12 +7,9 @@ from htmlnode import ParentNode
 def extract_title(markdown):
     lines = markdown.split('\n')
     for line in lines:
-        if line.startswith('#'):
-            return line[1:].strip()
         if line.startswith('# '):
             return line[2:].strip()
-        else:
-            raise ValueError("No title found in markdown")
+    raise ValueError("No title found in markdown")
         
 def generate_page(from_path, template_path, dest_path):
     print(f"Generating page from {from_path} to {dest_path} using template {template_path}")
@@ -23,7 +20,7 @@ def generate_page(from_path, template_path, dest_path):
     html_node = markdown_to_html_node(markdown)
     markdown_to_html = html_node.to_html()
     title = extract_title(markdown)
-    html = template.replace("{{title}}", title).replace("{{content}}", markdown_to_html)
+    html = template.replace("{{ Title }}", title).replace("{{ Content }}", markdown_to_html)
     with open(dest_path, 'w') as f:
         f.write(html)
     
