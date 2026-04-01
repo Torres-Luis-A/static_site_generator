@@ -1,7 +1,7 @@
 from enum import Enum
 
 from htmlnode import ParentNode
-from tex_to_nodes import text_to_textnodes
+from text_to_nodes import text_to_textnodes
 from textnode import TextType, TextNode, text_node_to_html_node
 from split_nodes_delimiter import split_nodes_delimiter, split_nodes_image, split_nodes_link
 from extract_markdown_images import extract_markdown_images, extract_markdown_links
