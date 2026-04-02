@@ -8,7 +8,7 @@ from generate_pages_recursive import generate_pages_recursive
 
 
 dir_path_static = "./static"
-dir_path_public = "./public"
+dir_path_public = "./docs"
 default_basepath = "/"
 
 
